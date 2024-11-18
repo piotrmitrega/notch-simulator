@@ -25,7 +25,7 @@ export function DevToolsApp() {
 
   return (
     <div className="devtools-app">
-      <h1>DevTools Panexl</h1>
+      <h1>DevTools Panel</h1>
       <div>
         <p>Inspecting Tab ID: {tabId}</p>
         <p>Current URL: {url}</p>

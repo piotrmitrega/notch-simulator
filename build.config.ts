@@ -40,8 +40,9 @@ if (isWatch) {
     "./content",
     "./popup",
     "./devtools",
+    "./shared",
     "./manifest.json",
   ];
 
-  await watchFiles(watchPaths);
+  await watchFiles(watchPaths, config);
 }

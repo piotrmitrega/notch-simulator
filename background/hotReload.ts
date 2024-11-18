@@ -1,20 +1,12 @@
+import { fetchChangeInfo } from "../shared/hotReload/utils.ts";
+import type { ChangeInfo } from "../shared/hotReload/types.ts";
+
 /**
  * Content script definition from the manifest.json file
  */
 interface ContentScript {
   matches: string[];
   js: string[];
-}
-
-/**
- * Parsed change info from the reload-signal.js file
- */
-interface ChangeInfo {
-  hasBackgroundChanges: boolean;
-  hasContentChanges: boolean;
-  hasPopupChanges: boolean;
-  hasDevToolsChanges: boolean;
-  timestamp: number;
 }
 
 let lastReloadTime = Date.now();
@@ -54,32 +46,6 @@ async function checkForChanges() {
   const changes = await fetchChangeInfo();
   if (changes) {
     await handleChanges(changes);
-  }
-}
-
-/**
- * Fetches the change info from the reload-signal.js file.
- * This file is injected into the extension by the build process and contains list of changed files.
- */
-async function fetchChangeInfo(): Promise<ChangeInfo | null> {
-  try {
-    const response = await fetch(chrome.runtime.getURL("reload-signal.js"));
-    const content = await response.text();
-
-    const matches = content.match(/\/\/ (\d+) \[(.*?)\]/);
-    if (!matches) return null;
-
-    const [, timestamp, changedFiles] = matches;
-    return {
-      timestamp: parseInt(timestamp),
-      hasBackgroundChanges: changedFiles.includes("background/"),
-      hasContentChanges: changedFiles.includes("content/"),
-      hasPopupChanges: changedFiles.includes("popup/"),
-      hasDevToolsChanges: changedFiles.includes("devtools/"),
-    };
-  } catch (error) {
-    console.error("[HOT RELOAD] Error fetching change info:", error);
-    return null;
   }
 }
 

@@ -1,3 +1,5 @@
+import { fetchChangeInfo } from "../shared/hotReload/utils.ts";
+
 const LAST_RELOAD_KEY = 'devtools-last-reload-time';
 
 function getLastReloadTime(): number {
@@ -10,20 +12,17 @@ function setLastReloadTime(time: number) {
 
 async function checkForChanges() {
   try {
-    const response = await fetch(chrome.runtime.getURL("reload-signal.js"));
-    const content = await response.text();
+    console.log("[HOT RELOAD] Checking for changes in devtools..x.");
+    const changes = await fetchChangeInfo();
+    console.log("[HOT RELOAD] Changes:", changes);
+    if (!changes) return;
 
-    const matches = content.match(/\/\/ (\d+) \[(.*?)\]/);
-    if (!matches) return;
-
-    const [, timestamp, changedFiles] = matches;
-    const changeTime = parseInt(timestamp);
     const lastReloadTime = getLastReloadTime();
 
-    if (changeTime > lastReloadTime) {
-      setLastReloadTime(changeTime);
+    if (changes.timestamp > lastReloadTime) {
+      setLastReloadTime(changes.timestamp);
 
-      if (changedFiles.includes("devtools/")) {
+      if (changes.hasDevToolsChanges) {
         console.log("[HOT RELOAD] DevTools changes detected, reloading...");
         globalThis.location.reload();
       }

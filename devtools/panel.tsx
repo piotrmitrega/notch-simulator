@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { DevToolsApp } from "./DevToolsApp";
+import { DevToolsApp } from "./DevToolsApp.tsx";
 
 declare const __DEV__: boolean;
 
