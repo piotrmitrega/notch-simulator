@@ -122,6 +122,10 @@ async function getContentScriptMatches(): Promise<string[]> {
 const showReloadIndicator = async (text: string) => {
   await chrome.action.setBadgeText({ text });
   await chrome.action.setBadgeBackgroundColor({ color: "#4CAF50" });
+
+  setTimeout(() => {
+    chrome.action.setBadgeText({ text: "" });
+  }, 2000);
 };
 
 /**
