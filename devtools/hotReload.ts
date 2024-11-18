@@ -12,9 +12,7 @@ function setLastReloadTime(time: number) {
 
 async function checkForChanges() {
   try {
-    console.log("[HOT RELOAD] Checking for changes in devtools..x.");
     const changes = await fetchChangeInfo();
-    console.log("[HOT RELOAD] Changes:", changes);
     if (!changes) return;
 
     const lastReloadTime = getLastReloadTime();

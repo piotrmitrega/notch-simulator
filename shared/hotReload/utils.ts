@@ -5,7 +5,6 @@ export async function fetchChangeInfo(): Promise<ChangeInfo | null> {
     const response = await fetch(chrome.runtime.getURL("reload-signal.js"));
     const content = await response.text();
 
-    console.log("[HOT RELOAD] Fetched change info:", content);
     const matches = content.match(/\/\/ (\d+) \[(.*?)\]/);
     if (!matches) return null;
 
