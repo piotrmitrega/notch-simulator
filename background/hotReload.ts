@@ -13,6 +13,7 @@ interface ChangeInfo {
   hasBackgroundChanges: boolean;
   hasContentChanges: boolean;
   hasPopupChanges: boolean;
+  hasDevToolsChanges: boolean;
   timestamp: number;
 }
 
@@ -74,6 +75,7 @@ async function fetchChangeInfo(): Promise<ChangeInfo | null> {
       hasBackgroundChanges: changedFiles.includes("background/"),
       hasContentChanges: changedFiles.includes("content/"),
       hasPopupChanges: changedFiles.includes("popup/"),
+      hasDevToolsChanges: changedFiles.includes("devtools/"),
     };
   } catch (error) {
     console.error("[HOT RELOAD] Error fetching change info:", error);
@@ -93,10 +95,9 @@ async function handleChanges(changes: ChangeInfo) {
 
   lastReloadTime = changes.timestamp;
 
-  if (changes.hasBackgroundChanges || changes.hasContentChanges) {
+  if (changes.hasBackgroundChanges || changes.hasContentChanges || changes.hasDevToolsChanges) {
     await showReloadIndicator("↻");
-    // For both background and content changes, we reload the extension
-    // Content script reloading will be handled by onInstalled listener
+    // For background, content, or devtools changes, we reload the extension
     chrome.runtime.reload();
   } else {
     await showReloadIndicator("✓");

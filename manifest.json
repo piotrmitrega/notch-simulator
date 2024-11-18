@@ -36,5 +36,6 @@
   "host_permissions": [
     "chrome-extension://*",
     "<all_urls>"
-  ]
+  ],
+  "devtools_page": "devtools/devtools.html"
 }
