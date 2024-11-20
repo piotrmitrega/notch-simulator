@@ -31,7 +31,9 @@
   "permissions": [
     "activeTab",
     "scripting",
-    "tabs"
+    "tabs",
+    "debugger",
+    "devtools"
   ],
   "host_permissions": [
     "chrome-extension://*",

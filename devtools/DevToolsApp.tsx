@@ -29,6 +29,31 @@ export function DevToolsApp() {
       <div>
         <p>Inspecting Tab ID: {tabId}</p>
         <p>Current URL: {url}</p>
+        <button onClick={() =>{
+          chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
+            if (tab) {
+              const tabId = tab.id;
+          
+              // Attach to the active tab
+              chrome.debugger.attach({ tabId }, "1.3", () => {
+                // Set the viewport size
+                chrome.debugger.sendCommand(
+                  { tabId },
+                  chrome.debugger.sendCommand
+                  "Emulation.setDeviceMetricsOverride",
+                  {
+                    width: 375, // Desired width
+                    height: 812, // Desired height
+                    deviceScaleFactor: 2,
+                    mobile: true
+                  }
+                );
+              });
+            }
+          });
+        }}>
+          Open in mobile
+        </button>
       </div>
     </div>
   );
